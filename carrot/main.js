@@ -10,8 +10,6 @@ const fieldRect = field.getBoundingClientRect();
 
 const gameBtn = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
-const gameTimerMiliSec = gameTimer.querySelector(".milisec");
-const gameTimerSec = gameTimer.querySelector(".sec");
 const gameScore = document.querySelector(".game__score");
 
 const popUp = document.querySelector(".pop-up");
@@ -23,7 +21,7 @@ let score = 0;
 let secondsTimer = null;
 let millisecondsTimer = null;
 
-gameTimerSec.innerText = `${GAME_DURATION_SEC}:`;
+gameTimer.innerText = `${GAME_DURATION_SEC}.0`;
 
 // 게임 화면을 클릭 했을 때
 field.addEventListener("click", onFieldClick);
@@ -59,6 +57,7 @@ function updateScoreBoard() {
   }
 }
 
+// 게임 시작 버튼을 눌렀을 때
 gameBtn.addEventListener("click", () => {
   if (started) {
     stopGame("Replay?");
@@ -74,6 +73,7 @@ function startGame() {
   initGame();
   showStopBtn();
   timerStart(GAME_DURATION_SEC);
+  hidePopUp();
 }
 
 function initGame() {
@@ -114,7 +114,7 @@ function stopGame(message) {
   gameStopBtnIcon.classList.add("fa-play");
   gameStopBtnIcon.classList.remove("fa-stop");
 
-  hideStopBtn();
+  //   hideStopBtn();
   showPopUp(message);
 }
 
@@ -135,39 +135,39 @@ function showStopBtn() {
   gameStartBtnIcon.classList.remove("fa-play");
 }
 
-function hideStopBtn() {
-  gameBtn.style.visibility = "hidden";
-}
+// function hideStopBtn() {
+//   gameBtn.style.visibility = "hidden";
+// }
 
 function timerStart(seconds) {
   slowTimer(seconds);
-  fastTimer(seconds);
+  //   fastTimer(seconds);
 }
 
 function slowTimer(seconds) {
   let timer = seconds;
   secondsTimer = setInterval(() => {
-    timer--;
-    console.log(timer);
-    gameTimerSec.innerText = `${timer}:`;
-    if (timer == 0) {
+    timer = timer - 0.01;
+
+    gameTimer.innerText = timer.toFixed(2);
+    if (gameTimer.innerText == 0) {
       clearInterval(secondsTimer);
       showPopUp("Time Over");
     }
-  }, 1000);
+  }, 10);
 }
 
-function fastTimer(seconds) {
-  let miliTimer = seconds * 10;
-  millisecondsTimer = setInterval(() => {
-    miliTimer--;
-    gameTimerMiliSec.innerText = miliTimer;
-    if (miliTimer == 0) {
-      clearInterval(millisecondsTimer);
-      showPopUp("Time Over");
-    }
-  }, 100);
-}
+// function fastTimer(seconds) {
+//   let miliTimer = seconds;
+//   millisecondsTimer = setInterval(() => {
+//     miliTimer--;
+//     gameTimerMiliSec.innerText = miliTimer;
+//     if (miliTimer == 0) {
+//       clearInterval(millisecondsTimer);
+//       showPopUp("Time Over");
+//     }
+//   }, 100);
+// }
 
 function timerStop() {
   clearInterval(secondsTimer);
