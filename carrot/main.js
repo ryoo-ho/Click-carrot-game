@@ -10,6 +10,8 @@ const fieldRect = field.getBoundingClientRect();
 
 const gameBtn = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
+const gameTimerMiliSec = gameTimer.querySelector(".milisec");
+const gameTimerSec = gameTimer.querySelector(".sec");
 const gameScore = document.querySelector(".game__score");
 
 const popUp = document.querySelector(".pop-up");
@@ -18,27 +20,32 @@ const popUpMessage = document.querySelector(".pop-up__message");
 
 let started = false;
 let score = 0;
-let timer = null;
+let secondsTimer = null;
+let millisecondsTimer = null;
 
-gameTimer.innerText = GAME_DURATION_SEC;
+gameTimerSec.innerText = `${GAME_DURATION_SEC}:`;
 
+// 게임 화면을 클릭 했을 때
 field.addEventListener("click", onFieldClick);
 
+// 게임 화면을 클릭 했을 때 - 당근이면? 벌레면?
 function onFieldClick(event) {
-  if (!started) {
-    return;
-  }
   const target = event.target;
+
+  // 클릭하는 target에 class가 carrot 이면 실행
   if (target.matches(".carrot")) {
-    // 당근
     target.remove();
     score++;
+    console.log(event.target);
     updateScoreBoard();
+
+    // 클릭하는 target에 class가 bug 이면 실행
   } else if (target.matches(".bug")) {
     stopGame("You Lose!");
   }
 }
 
+// 팝업창의 리플레이 버튼을 눌렀을 때
 popUPRefreshBtn.addEventListener("click", () => {
   startGame();
   hidePopUp();
@@ -46,8 +53,9 @@ popUPRefreshBtn.addEventListener("click", () => {
 
 function updateScoreBoard() {
   gameScore.innerText = CARROT_COUNT - score;
-  if (score == 5) {
+  if (score == CARROT_COUNT) {
     stopGame("You Won!");
+    timerStop();
   }
 }
 
@@ -60,10 +68,43 @@ gameBtn.addEventListener("click", () => {
 });
 
 function startGame() {
+  gameScore.innerText = CARROT_COUNT;
+  score = 0;
   started = true;
   initGame();
   showStopBtn();
   timerStart(GAME_DURATION_SEC);
+}
+
+function initGame() {
+  field.innerHTML = "";
+  // 벌레와 당근을 생성한 뒤 field에 추가
+  addItem("carrot", CARROT_COUNT, "img/carrot.png");
+  addItem("bug", BUG_COUNT, "img/bug.png");
+}
+
+function addItem(className, count, imgPath) {
+  const x1 = 0;
+  const y1 = 0;
+  const x2 = fieldRect.width - CARROT_SIZE;
+  const y2 = fieldRect.height - CARROT_SIZE;
+
+  for (let i = 0; i < count; i++) {
+    const item = document.createElement("img");
+
+    item.setAttribute("class", className);
+    item.setAttribute("src", imgPath);
+    item.style.position = "absolute";
+    const x = randomNumber(x1, x2);
+    const y = randomNumber(y1, y2);
+    item.style.left = `${x}px`;
+    item.style.top = `${y}px`;
+    field.appendChild(item);
+  }
+}
+
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
 function stopGame(message) {
@@ -99,30 +140,48 @@ function hideStopBtn() {
 }
 
 function timerStart(seconds) {
-  let time = seconds;
-  timer = setInterval(() => {
-    time = time - 1;
-    gameTimer.innerText = time;
-    if (time == 0) {
-      clearInterval(timer);
+  slowTimer(seconds);
+  fastTimer(seconds);
+}
+
+function slowTimer(seconds) {
+  let timer = seconds;
+  secondsTimer = setInterval(() => {
+    timer--;
+    console.log(timer);
+    gameTimerSec.innerText = `${timer}:`;
+    if (timer == 0) {
+      clearInterval(secondsTimer);
       showPopUp("Time Over");
     }
   }, 1000);
 }
 
-function timerStop() {
-  clearInterval(timer);
+function fastTimer(seconds) {
+  let miliTimer = seconds * 10;
+  millisecondsTimer = setInterval(() => {
+    miliTimer--;
+    gameTimerMiliSec.innerText = miliTimer;
+    if (miliTimer == 0) {
+      clearInterval(millisecondsTimer);
+      showPopUp("Time Over");
+    }
+  }, 100);
 }
 
+function timerStop() {
+  clearInterval(secondsTimer);
+  clearInterval(millisecondsTimer);
+}
+
+// 벌레와 당근을 생성한 뒤 field에 추가
 function initGame() {
   field.innerHTML = "";
-  // 벌레와 당근을 생성한 뒤 field에 추가
   addItem("carrot", CARROT_COUNT, "img/carrot.png");
   addItem("bug", BUG_COUNT, "img/bug.png");
-
-  // 당근을 클릭하면 카운트
 }
 
+// 벌레와 당근을 생성하는 함수
 function addItem(className, count, imgPath) {
   const x1 = 0;
   const y1 = 0;
@@ -146,5 +205,3 @@ function addItem(className, count, imgPath) {
 function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
-
-//refresh 새로운 게임 시작
