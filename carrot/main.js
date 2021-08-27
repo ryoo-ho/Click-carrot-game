@@ -21,10 +21,19 @@ let score = 0;
 let secondsTimer = null;
 let millisecondsTimer = null;
 
-gameTimer.innerText = `${GAME_DURATION_SEC}.0`;
+const carrotSound = new Audio("./sound/carrot_pull.mp3");
+const bugSound = new Audio("./sound/bug_pull.mp3");
+const wonSound = new Audio("./sound/game_win.mp3");
+
+gameTimer.innerText = `${GAME_DURATION_SEC}.00`;
 
 // 게임 화면을 클릭 했을 때
 field.addEventListener("click", onFieldClick);
+
+// 사운드 함수
+function playSound(sound) {
+  sound.play();
+}
 
 // 게임 화면을 클릭 했을 때 - 당근이면? 벌레면?
 function onFieldClick(event) {
@@ -36,10 +45,11 @@ function onFieldClick(event) {
     score++;
     console.log(event.target);
     updateScoreBoard();
-
+    playSound(carrotSound);
     // 클릭하는 target에 class가 bug 이면 실행
   } else if (target.matches(".bug")) {
     stopGame("You Lose!");
+    playSound(bugSound);
   }
 }
 
@@ -54,6 +64,7 @@ function updateScoreBoard() {
   if (score == CARROT_COUNT) {
     stopGame("You Won!");
     timerStop();
+    playSound(wonSound);
   }
 }
 
@@ -74,6 +85,7 @@ function startGame() {
   showStopBtn();
   timerStart(GAME_DURATION_SEC);
   hidePopUp();
+  gameBtn.classList.remove("pop-up__hide");
 }
 
 function initGame() {
@@ -113,6 +125,7 @@ function stopGame(message) {
   const gameStopBtnIcon = gameBtn.querySelector(".fa-stop");
   gameStopBtnIcon.classList.add("fa-play");
   gameStopBtnIcon.classList.remove("fa-stop");
+  gameBtn.classList.add("pop-up__hide");
 
   //   hideStopBtn();
   showPopUp(message);

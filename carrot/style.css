@@ -47,7 +47,8 @@ button {
   background-color: white;
   text-align: center;
   border: var(--border);
-  margin-top: 8px;
+  margin: 8px 0px;
+
   border-radius: var(--border-radius);
   font-size: 30px;
 }
@@ -57,7 +58,7 @@ button {
   height: 50px;
   font-size: 46px;
   text-align: center;
-  margin-top: 8px;
+
   border: var(--border);
   border-radius: 50%;
   background-color: darksalmon;
