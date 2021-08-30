@@ -5,6 +5,8 @@
 
 body {
   text-align: center;
+  background-color: black;
+  height: 554px;
 }
 
 button {
@@ -86,7 +88,7 @@ button {
   border-radius: 20px;
 }
 
-.pop-up__hide {
+.make__hide {
   display: none;
 }
 
