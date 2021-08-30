@@ -10,7 +10,7 @@ gameFinishBanner.setClickListener(() => {
 const CARROT_SIZE = 80;
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
-const GAME_DURATION_SEC = 2;
+const GAME_DURATION_SEC = 3;
 
 const field = document.querySelector(".game__field");
 const fieldRect = field.getBoundingClientRect();
@@ -19,10 +19,6 @@ const gameBtn = document.querySelector(".game__button");
 const gameTimer = document.querySelector(".game__timer");
 const gameScore = document.querySelector(".game__score");
 const gameStartBtnIcon = gameBtn.querySelector(".fas");
-
-const popUp = document.querySelector(".pop-up");
-const popUPRefreshBtn = document.querySelector(".pop-up__refresh");
-const popUpMessage = document.querySelector(".pop-up__message");
 
 let started = false;
 let score = 0;
@@ -51,7 +47,6 @@ function onFieldClick(event) {
   if (target.matches(".carrot")) {
     target.remove();
     score++;
-    console.log(event.target);
     updateScoreBoard();
     playSound(carrotSound);
   } else if (target.matches(".bug")) {
