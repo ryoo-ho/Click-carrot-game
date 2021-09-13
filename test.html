@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .button {
+        font-size: 30px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="button setTimeOut">setTimeout</button>
+    <button class="button promise">promise</button>
+    <button class="button debug">debug</button>
+    <script>
+      function handleClick() {
+        console.log("handleclick");
+        setTimeout(() => {
+          console.log("setTimeout");
+          handleClick();
+        }, 1000);
+      }
+
+      function handleClick2() {
+        console.log("handleClick");
+        Promise.resolve(0).then(() => {
+          console.log("then");
+          handleClick2();
+        });
+      }
+
+      function add(a, b) {
+        const sum = a + b;
+        return sum;
+      }
+
+      function calculate(a, b) {
+        console.log("calculate");
+        const result = add(a, b);
+        return result;
+      }
+
+      function main() {
+        const result = calculate(3, 4);
+        const element = document.createElement("span");
+        element.innerText = result;
+        document.body.appendChild(element);
+        console.log(result);
+        return;
+      }
+      const setTimeOutBtn = document.querySelector(".setTimeOut");
+      const promiseBtn = document.querySelector(".promise");
+      const debugBtn = document.querySelector(".debug");
+      setTimeOutBtn.addEventListener("click", handleClick);
+      promiseBtn.addEventListener("click", handleClick2);
+      debugBtn.addEventListener("click", () => {
+        main();
+      });
+    </script>
+  </body>
+</html>

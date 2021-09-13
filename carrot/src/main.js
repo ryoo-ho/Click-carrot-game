@@ -147,9 +147,9 @@ function timerStop() {
 
 function slowTimer(seconds) {
   timer = setInterval(() => {
-    seconds = seconds - 0.01;
+    seconds = (seconds - 0.01).toFixed(2);
     console.log(seconds);
-    gameTimer.innerText = seconds.toFixed(2);
+    gameTimer.innerText = seconds;
     if (gameTimer.innerText == 0) {
       clearInterval(timer);
       hideField();
